@@ -55,6 +55,28 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(paths[0][0],"A","Starts from A")
         self.assertEqual(paths[0][-1],"B","Ends at B")
 
+    def check_vertex_at_begin(self, vertex, paths):
+        vertex_at_begin = False
+        for path in paths:
+            if path[0] == vertex:
+                vertex_at_begin = True
+                break;
+        return vertex_at_begin
+
+    def check_vertex_at_end(self, vertex, paths):
+        vertex_at_end = False
+        for path in paths:
+            if path[-1] == vertex:
+                vertex_at_end = True
+                break;
+        return vertex_at_end
+
+    def check_path_length(self, paths, length):
+        for path in paths:
+            if len(path) != length:
+                return False
+        return True
+
     def test_list_all_paths(self):
         """
         Test All Paths.
@@ -62,7 +84,26 @@ class TestGraph(unittest.TestCase):
         1. All vertex should come in Starting and Ending of Path.
         2. All Paths should have equal length.
         """
-        pass
+        oGraph = Graph()
+        self.assertEqual(oGraph.list_all_paths(),[],"Empty list")
+        oGraph.addEdge("A", "B")
+        paths = oGraph.list_all_paths()
+        self.assertEqual(len(paths),2,"there are 2 path.since only 2 vertex")
+        self.assertTrue(self.check_vertex_at_begin("A", paths), "vertex A present in Begining ")
+        self.assertTrue(self.check_vertex_at_begin("B", paths), "vertex B present in Begining ")
+        self.assertTrue(self.check_vertex_at_end("A", paths), "vertex A present in Ending ")
+        self.assertTrue(self.check_vertex_at_end("B", paths), "vertex V present in Ending ")
+        self.assertTrue(self.check_path_length(paths, len(oGraph.vertex)))
+        oGraph.addEdge("A", "C")
+        paths = oGraph.list_all_paths()
+        self.assertEqual(len(paths),6,"there are 6 possible path")
+        self.assertTrue(self.check_vertex_at_begin("A", paths), "vertex A present in Begining ")
+        self.assertTrue(self.check_vertex_at_begin("B", paths), "vertex B present in Begining ")
+        self.assertTrue(self.check_vertex_at_begin("C", paths), "vertex C present in Begining ")
+        self.assertTrue(self.check_vertex_at_end("A", paths), "vertex A present in Ending ")
+        self.assertTrue(self.check_vertex_at_end("B", paths), "vertex V present in Ending ")
+        self.assertTrue(self.check_vertex_at_begin("C", paths), "vertex C present in Begining ")
+        self.assertTrue(self.check_path_length(paths, len(oGraph.vertex)))
 
 if __name__ == '__main__':
     unittest.main()
