@@ -29,10 +29,11 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(oGraph.edges, {"A": ["B"], "B": ["C"]})
         self.assertEqual(oGraph.vertex, ["A", "B", "C"],
                          "vertex not added properly")
+        # DAG property not Cyclic Edges.
+        # https://github.com/TonyFrancis/graph/issues/1
         oGraph.addEdge("C", "B")
-        print oGraph.cyclic()
         self.assertEqual(oGraph.edges, {"A": ["B"], "B": ["C"]},
-                         "Cyclic Edge added")
+                         "Cyclic Edge Ignored")
 
     def test_dfs_paths(self):
         """
