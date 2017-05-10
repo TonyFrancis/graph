@@ -1,3 +1,6 @@
+"""
+Sample Graph and its path.
+"""
 from lib.graph import Graph
 
 if __name__ == "__main__":
