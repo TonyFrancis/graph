@@ -1,4 +1,6 @@
 """Graph class for graph representation."""
+
+
 class Graph(object):
     """docstring for Grpah."""
 
@@ -9,15 +11,40 @@ class Graph(object):
         self.edges = {}
 
     def addEdge(self, u, v):
-        """Adding new vertex."""
+        """Adding new vertex. and Check if cycle exists"""
         if u not in self.vertex:
             self.vertex.append(u)
         if v not in self.vertex:
             self.vertex.append(v)
         if u != v:
-            edges_to_u = self.edges.get(u,[])
+            edges_to_u = self.edges.get(u, [])
             if v not in edges_to_u:
                 self.edges[u] = edges_to_u + [v]
+        # github issue https://github.com/TonyFrancis/graph/issues/1
+        # revert is It create Cycle.
+        if self.cyclic():
+            self.edges[u].remove(v)
+            if not self.edges[u]:
+                del self.edges[u]
+
+    def cyclic(self):
+        """Return True if the directed graph has a cycle."""
+        g = self.edges
+        path = set()
+        visited = set()
+
+        def visit(vertex):
+            if vertex in visited:
+                return False
+            visited.add(vertex)
+            path.add(vertex)
+            for neighbour in g.get(vertex, ()):
+                if neighbour in path or visit(neighbour):
+                    return True
+            path.remove(vertex)
+            return False
+
+        return any(visit(v) for v in g)
 
     def dfs_paths(self, start, goal):
         """
@@ -43,5 +70,5 @@ class Graph(object):
         for u in self.vertex:
             for v in self.vertex:
                 if u != v:
-                    paths = paths + list(self.dfs_paths(u,v))
+                    paths = paths + list(self.dfs_paths(u, v))
         return paths
